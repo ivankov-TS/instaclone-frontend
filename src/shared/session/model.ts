@@ -9,7 +9,7 @@ type User = {
   username: string;
 };
 
-type Session = {
+export type Session = {
   token: string;
   user: User;
 };

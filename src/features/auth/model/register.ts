@@ -1,3 +1,4 @@
+import { apiClient } from "@/shared/api/api-client";
 import { $session } from "@/shared/session/model";
 import {
   combine,
@@ -26,16 +27,14 @@ export const passwordField = createField(
 export const confirmPasswordField = createField((value) => "", formSubmitted);
 
 const registerUserFx = createEffect(async (values: Record<string, string>) => {
-  const response = await fetch("http://localhost:3000/api/auth/register", {
+  const response = await apiClient({
+    url: "auth/register",
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+    body: {
       username: values.username,
       email: values.email,
       password: values.password,
-    }),
+    },
   });
   const user = await response.json();
   return user;

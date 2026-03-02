@@ -1,10 +1,31 @@
 import { $profile, $profilePagePanding } from "@/features/profile/model";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { Button } from "@/shared/ui/button";
 import { Logo } from "@/shared/ui/logo";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useUnit } from "effector-react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/ui/dialog";
+import { Field, FieldLabel } from "@/shared/ui/field";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
+import {
+  bioField,
+  saveChangesClicked,
+  usernameField,
+} from "@/features/profile/edit";
 
 export const ProfilePage = () => {
+  const usernameValue = useUnit(usernameField.$value);
+  const bioValue = useUnit(bioField.$value);
   const profile = useUnit($profile);
   const pageIsLoading = useUnit($profilePagePanding);
 
@@ -63,6 +84,49 @@ export const ProfilePage = () => {
             </div>
           </div>
         </div>
+        <Dialog>
+          <DialogTrigger>
+            <Button>Edit profile</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit profile</DialogTitle>
+            </DialogHeader>
+            <Field>
+              <FieldLabel htmlFor="username">Username</FieldLabel>
+              <Input
+                value={usernameValue}
+                onChange={(event) => {
+                  usernameField.valueChanged(event.currentTarget.value);
+                }}
+                id="username"
+                placeholder="username"
+              />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="textarea-bio">Bio</FieldLabel>
+              <Textarea
+                value={bioValue}
+                onChange={(event) => {
+                  bioField.valueChanged(event.currentTarget.value);
+                }}
+                id="textarea-bio"
+                placeholder="Something about you..."
+              />
+            </Field>
+            <DialogFooter>
+              <DialogClose>
+                <Button
+                  onClick={() => {
+                    saveChangesClicked();
+                  }}
+                >
+                  Save changes
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         <div className="grid grid-cols-3 gap-4">
           <Photo />
           <Photo />
